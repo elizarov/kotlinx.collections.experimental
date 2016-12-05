@@ -12,15 +12,15 @@ class GeneratorController<T> internal constructor(coroutine: GeneratorController
         nextStep.resume(Unit)
     }
 
-    suspend fun yield(value: T, c: Continuation<Unit>) {
+    suspend fun yield(value: T) = suspendWithCurrentContinuation<Unit> { c ->
         nextItem = value
         nextState = 1
         nextStep = c
+        Suspend
     }
 
     operator fun handleResult(result: Unit, c: Continuation<Nothing>) {
         nextState = 0
-
     }
 
     override fun next(): T {
